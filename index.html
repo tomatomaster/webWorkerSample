@@ -30,7 +30,7 @@
             //Pointer Event
             canvas.addEventListener("pointerdown", handleStart, false);
             canvas.addEventListener("pointermove", handleMove, false);
-            //canvas.addEventListener("pointerup", handleEnd, false);
+            canvas.addEventListener("pointerup", handleEnd, false);
         }
     
         function handleStart() {
@@ -47,9 +47,12 @@
             });
         }
 
-</script>
-<script type="text/javascript" src="./paper-full.js"></script>
-<script type="text/paperscript" canvas="canvas">
+        function handleEnd(e) {
+            worker.postMessage({
+                type: 'pointerup', // 処理区別のために追加
+            });
+        }
+
 </script>
 </head>
 <body>
