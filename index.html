@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Shapes</title>
+<link rel="stylesheet" href="./css/style.css">
+<script type="text/javascript">
+    let worker
+        window.onload = function () {
+            let canvas = document.getElementById("canvas");
+            const offscreenCanvas = canvas.transferControlToOffscreen();
+            
+            // LocalでWorkerを動かすおまじない
+            // https://tshino.hatenablog.com/entry/20180106/1515218776        
+            var newWorkerViaBlob = function(relativePath) {
+                var baseURL = window.location.href.replace(/\\/g, '/').replace(/\/[^\/]*$/, '/');
+                var array = ['importScripts("' + baseURL + relativePath + '");'];
+                var blob = new Blob(array, {type: 'text/javascript'});
+                var url = window.URL.createObjectURL(blob);
+                return new Worker(url);
+            };
+            worker = newWorkerViaBlob("Worker.js");            
+            
+            worker.postMessage({
+                type: 'init',
+                canvas: offscreenCanvas
+            },
+                [offscreenCanvas]
+            )
+            //Pointer Event
+            canvas.addEventListener("pointerdown", handleStart, false);
+            canvas.addEventListener("pointermove", handleMove, false);
+            //canvas.addEventListener("pointerup", handleEnd, false);
+        }
+    
+        function handleStart() {
+            worker.postMessage({
+                type: 'pointerdown', // 処理区別のために追加
+            });
+        }
+
+        function handleMove(e) {
+            worker.postMessage({
+                type: 'pointermove', // 処理区別のために追加
+                x: e.x,
+                y: e.y
+            });
+        }
+
+</script>
+<script type="text/javascript" src="./paper-full.js"></script>
+<script type="text/paperscript" canvas="canvas">
+</script>
+</head>
+<body>
+    <canvas id="canvas" resize></canvas>
+</body>
+</html>
