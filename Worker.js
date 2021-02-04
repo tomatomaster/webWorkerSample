@@ -32,6 +32,6 @@ function getRandomInt(max) {
 }
 
 function draw(event) {
-    ctx.fillRect(event.data.x/5, event.data.y/5, 3, 3);
+    ctx.fillRect(event.data.x, event.data.y, 3, 3);
 }
 
