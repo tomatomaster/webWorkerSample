@@ -22,8 +22,7 @@ function init(event) {
     console.log('init');
 }
 
-function pointerMove(event) {    
-    console.log('Move');
+function pointerMove(event) {
     draw(event);
 }
 
